@@ -49,7 +49,7 @@ class RandomSourceTask : SourceTask() {
                 null,
                 null,
                 STRING_SCHEMA,
-                Random.nextInt(100).toString(),
+                prefix + Random.nextInt(100).toString(),
                 Instant.now().epochSecond
             )
         )

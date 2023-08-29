@@ -3,7 +3,7 @@ Create a compacted topic:
 kafka-topics --bootstrap-server localhost:29092 --create --topic current-weather-topic --config cleanup.policy=compact --config min.cleanable.dirty.ratio=0.2 --config segment.ms=30000
 ```
 
-Add connector to Kafka Connect:
+Build jar, add it to Kafka Connect, and create a new connector:
 
 ```bash
 curl --location 'http://localhost:8083/connectors' \

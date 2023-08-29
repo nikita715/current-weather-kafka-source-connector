@@ -1,4 +1,4 @@
-package ru.nikstep.kafka.connect.random
+package com.nikstep.kafka.connect.weather
 
 import org.apache.kafka.common.config.ConfigDef
 import org.apache.kafka.common.config.ConfigDef.Importance
@@ -6,7 +6,7 @@ import org.apache.kafka.common.config.ConfigDef.NonEmptyString
 import org.apache.kafka.connect.connector.Task
 import org.apache.kafka.connect.source.SourceConnector
 
-class RandomSourceConnector : SourceConnector() {
+class CurrentWeatherSourceConnector : SourceConnector() {
 
     private lateinit var props: Map<String, String>
 
@@ -17,10 +17,12 @@ class RandomSourceConnector : SourceConnector() {
     }
 
     override fun taskClass(): Class<out Task?> =
-        RandomSourceTask::class.java
+        CurrentWeatherSourceTask::class.java
 
     override fun taskConfigs(maxTasks: Int): List<Map<String, String>> =
-        listOf(props)
+        props.getValue("locations").split(",").map { location ->
+            HashMap(props).plus("location" to location)
+        }.take(maxTasks)
 
     override fun stop() {}
 
@@ -31,11 +33,20 @@ class RandomSourceConnector : SourceConnector() {
         val CONFIG_DEF: ConfigDef =
             ConfigDef()
                 .define(
-                    "prefix",
+                    "locations",
                     ConfigDef.Type.STRING,
-                    "value-",
+                    ConfigDef.NO_DEFAULT_VALUE,
+                    NonEmptyString(),
                     Importance.HIGH,
-                    "Prefix for all values"
+                    "CSV of locations to get current weather, i.e. London,New York"
+                )
+                .define(
+                    "pollPeriodMinutes",
+                    ConfigDef.Type.STRING,
+                    ConfigDef.NO_DEFAULT_VALUE,
+                    NonEmptyString(),
+                    Importance.HIGH,
+                    "Weather poll period in minutes"
                 )
                 .define(
                     "topic",
@@ -44,6 +55,14 @@ class RandomSourceConnector : SourceConnector() {
                     NonEmptyString(),
                     Importance.HIGH,
                     "The topic to publish data to"
+                )
+                .define(
+                    "apiKey",
+                    ConfigDef.Type.STRING,
+                    ConfigDef.NO_DEFAULT_VALUE,
+                    NonEmptyString(),
+                    Importance.HIGH,
+                    "Api key for https://www.visualcrossing.com/"
                 )
     }
 }

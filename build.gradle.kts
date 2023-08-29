@@ -15,6 +15,11 @@ repositories {
 dependencies {
     implementation("org.apache.kafka:connect-api:3.5.1")
 
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+
+    implementation("com.fasterxml.jackson.core:jackson-core:2.15.2")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
+
     implementation("org.slf4j:slf4j-api:2.0.7")
     implementation("org.slf4j:slf4j-simple:2.0.7")
 
@@ -39,7 +44,7 @@ tasks.withType(ShadowJar::class) {
     }
     manifest {
         attributes(
-            "Implementation-Title" to "Random Connector",
+            "Implementation-Title" to "Current Weather Connector",
             "Implementation-Version" to 1,
         )
     }

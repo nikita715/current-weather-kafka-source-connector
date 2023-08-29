@@ -1,3 +1,8 @@
+Create a compacted topic:
+```bash
+kafka-topics --bootstrap-server localhost:29092 --create --topic current-weather-topic --config cleanup.policy=compact --config min.cleanable.dirty.ratio=0.2 --config segment.ms=30000
+```
+
 Add connector to Kafka Connect:
 
 ```bash

@@ -1,5 +1,6 @@
 Add connector to Kafka Connect:
 
+```bash
 curl --location 'http://localhost:8083/connectors' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -15,3 +16,4 @@ curl --location 'http://localhost:8083/connectors' \
 "pollPeriodMinutes": "1"
 }
 }'
+```
